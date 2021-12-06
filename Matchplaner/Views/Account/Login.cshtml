@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutRegisterAndLogin.cshtml";
+}
+
+@model Benutzer
+
+<div class="text-center container mb-5" style="margin-top: 8%;">
+    <div class="row justify-content-around">
+        <div style="border-radius: 15px;" class="shadow p-5 bg-white text-left col-5">
+            <strong style="font-size: 25px;">Anmelden</strong>
+            <br />
+            <br />
+            <form method="post">
+                <div class="form-group">
+                    <input type="text" placeholder="Benutzername" asp-for="benutzername" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Passwort" asp-for="passwort" class="form-control" />
+                </div>
+                @if (ViewBag.LoginError == null)
+                {
+
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewBag.LoginError
+                    </div>
+                }
+                <div class="form-group">
+                    <input type="submit" value="Anmelden" name="login" class="form-control btn btn-primary" />
+                </div>
+                <div>
+                    Du hast noch kein Konto? <a asp-controller="Account" asp-action="Registrieren">Erstelle dir einen!</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Matches";
+
+    if (User.Identity.IsAuthenticated == true)
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
+
+@model IEnumerable<Match>
+
+<div class="text-center">
+    <h1 class="display-4">Alle Matches</h1>
+    <br />
+
+    @foreach (var match in Model)
+    {
+        var datum = match.datum.ToString("M");
+        var uhrzeit = match.uhrzeit.ToString("t");
+
+        <div style="border-radius: 20px;" class="shadow p-3 mb-5 bg-white text-left">
+            <p><strong>@match.hallenname, </strong>@match.ort</p>
+            <p><strong>@datum, </strong>@uhrzeit</p>
+            <p>Mannschaft 1 vs. Mannschaft 2</p>
+        </div>
+    }
+
+</div>

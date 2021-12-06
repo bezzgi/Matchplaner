@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Registrieren";
+    Layout = "~/Views/Shared/_LayoutRegisterAndLogin.cshtml";
+}
+
+@model IEnumerable<registerHelper>
+
+<div class="text-center container mt-5 mb-5">
+    <div class="row justify-content-around">
+        <div style="border-radius: 15px;" class="shadow p-5 bg-white text-left">
+            <strong style="font-size: 25px;">Registrieren</strong>
+            <br />
+            <br />
+            <form method="post">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input type="text" placeholder="Vorname" name="vorname" class="form-control" />
+                    </div>
+                    <div class="form-group col">
+                        <input type="text" placeholder="Nachname" name="nachname" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input type="text" placeholder="Benutzername" name="benutzername" class="form-control" />
+                    </div>
+                    <div class="form-group col">
+                        <input type="password" placeholder="Passwort" name="passwort" class="form-control" />
+                    </div>
+                </div>
+                @foreach (var qualifikation in Model)
+                {
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" id="@registerHelper.qualifikation.id_qualifikation" name="qualifikation" value="@registerHelper.qualifikation.name" class="form-check-input" onClick="toggleSelect()" />
+                        <label class="form-check-label" for="@registerHelper.qualifikation.id_qualifikation"></label>
+                    </div>
+                }
+                <br />
+                <br />
+                <div class="form-group">
+                    <select class="custom-select" id="mannschaft" name="mannschaft">
+                        <option selected disabled></option>
+                        @foreach (var mannschaft in Model)
+                        {
+                            <option>@registerHelper.mannschaft.name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Registrieren" name="registrieren" class="form-control btn btn-primary" />
+                </div>
+                <div>
+                    Du hast bereits ein Konto? <a asp-controller="Account" asp-action="Anmelden">Melde dich an!</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = toggleSelect();
+
+    function toggleSelect()
+    {
+        var isChecked = document.getElementById(3).checked;
+        document.getElementById("mannschaft").disabled = !isChecked;
+    }
+</script>
