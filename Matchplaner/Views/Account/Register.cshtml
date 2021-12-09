@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_LayoutRegisterAndLogin.cshtml";
 }
 
-@model IEnumerable<registerHelper>
+@model registerHelper
 
 <div class="text-center container mt-5 mb-5">
     <div class="row justify-content-around">
@@ -14,40 +14,42 @@
             <form method="post">
                 <div class="form-row">
                     <div class="form-group col">
-                        <input type="text" placeholder="Vorname" name="vorname" class="form-control" />
+                        <input type="text" placeholder="Vorname" asp-for="benutzer.vorname" class="form-control" />
                     </div>
                     <div class="form-group col">
-                        <input type="text" placeholder="Nachname" name="nachname" class="form-control" />
+                        <input type="text" placeholder="Nachname" asp-for="benutzer.nachname" class="form-control" />
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col">
-                        <input type="text" placeholder="Benutzername" name="benutzername" class="form-control" />
+                        <input type="text" placeholder="Benutzername" asp-for="benutzer.benutzername" class="form-control" />
                     </div>
                     <div class="form-group col">
-                        <input type="password" placeholder="Passwort" name="passwort" class="form-control" />
+                        <input type="password" placeholder="Passwort" asp-for="benutzer.passwort" class="form-control" />
                     </div>
                 </div>
-                @foreach (var qualifikation in Model)
+                @foreach (var register in Model.benutzer.gewaehlteQualifikation)
                 {
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" id="@registerHelper.qualifikation.id_qualifikation" name="qualifikation" value="@registerHelper.qualifikation.name" class="form-check-input" onClick="toggleSelect()" />
-                        <label class="form-check-label" for="@registerHelper.qualifikation.id_qualifikation"></label>
-                    </div>
+            <div class="form-check form-check-inline">
+                @Html.HiddenFor(Qualifikation => register.id)
+                @Html.CheckBoxFor(Qualifikation => register.isChecked)
+                @Html.DisplayFor(Qualifikation => register.name)
+                
+            </div>
                 }
                 <br />
                 <br />
                 <div class="form-group">
-                    <select class="custom-select" id="mannschaft" name="mannschaft">
-                        <option selected disabled></option>
-                        @foreach (var mannschaft in Model)
+                    <select class="custom-select" id="mannschaft" asp-for="mannschaft">
+                        <option selected disabled>Mannschaft</option>
+                        @foreach (var register in Model.mannschaft)
                         {
-                            <option>@registerHelper.mannschaft.name</option>
+                            <option>@register.name</option>
                         }
                     </select>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Registrieren" name="registrieren" class="form-control btn btn-primary" />
+                    <input type="submit" value="Registrieren" name="Register" class="form-control btn btn-primary" />
                 </div>
                 <div>
                     Du hast bereits ein Konto? <a asp-controller="Account" asp-action="Anmelden">Melde dich an!</a>

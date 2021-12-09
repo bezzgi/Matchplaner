@@ -30,27 +30,25 @@
                     </div>
                 </div>
 
-                    <input type="hidden" value="1" asp-for="admin" class="form-control" />
+                <input type="hidden" value="1" asp-for="admin" class="form-control" />
 
-                    @if (ViewBag.CreateAdminError == null) { }
-                    else
-                    {
-                        <div class="alert alert-danger" role="alert">
-                            @ViewBag.CreateAdminError
-                        </div>
-                    }
-
-                    @if (ViewBag.CreateAdminMessage == null) { }
-                    else
-                    {
-                        <div class="alert alert-info" role="alert">
-                            @ViewBag.CreateAdminMessage
-                        </div>
-                    }
-
-                    <div class="form-group">
-                        <input type="submit" value="Admin erstellen" name="CreateAdmin" class="form-control btn btn-primary" />
+                @if (ViewBag.CreateAdminError != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewBag.CreateAdminError
                     </div>
+                }
+
+                @if (ViewBag.CreateAdminMessage != null)
+                {
+                    <div class="alert alert-info" role="alert">
+                        @ViewBag.CreateAdminMessage
+                    </div>
+                }
+
+                <div class="form-group">
+                    <input type="submit" value="Admin erstellen" name="CreateAdmin" class="form-control btn btn-primary" />
+                </div>
             </form>
         </div>
     </div>

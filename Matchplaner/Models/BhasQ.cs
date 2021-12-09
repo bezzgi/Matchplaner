@@ -16,5 +16,7 @@ namespace Matchplaner.Models
         public int benutzer_id_benutzer { get; set; }
 
         public int qualifikation_id_qualifikation { get; set; }
+
+        public Benutzer benutzer { get; set; }
     }
 }

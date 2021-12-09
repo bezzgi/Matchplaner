@@ -31,10 +31,6 @@ namespace Matchplaner.Controllers
             return View(match);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -42,6 +38,7 @@ namespace Matchplaner.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();

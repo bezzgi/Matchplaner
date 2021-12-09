@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Matchplaner.Helpers;
 
 namespace Matchplaner.Models
 {
@@ -28,5 +29,7 @@ namespace Matchplaner.Models
         public string passwort { get; set; }
 
         public int admin { get; set; }
+
+        public List<CheckBoxItem> gewaehlteQualifikation { get; set; }
     }
 }

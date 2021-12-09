@@ -12,10 +12,10 @@ namespace Matchplaner.Models
     [Keyless]
     public class registerHelper
     {
-        public static Benutzer benutzer = new Benutzer();
+        public Benutzer benutzer = new Benutzer();
 
-        public static Mannschaft mannschaft = new Mannschaft();
+        public List<Mannschaft> mannschaft = new List<Mannschaft>();
 
-        public static Qualifikation qualifikation = new Qualifikation();
+        public List<Qualifikation> qualifikation = new List<Qualifikation>();
     }
 }

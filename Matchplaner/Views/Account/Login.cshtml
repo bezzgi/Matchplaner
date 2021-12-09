@@ -18,11 +18,7 @@
                 <div class="form-group">
                     <input type="password" placeholder="Passwort" asp-for="passwort" class="form-control" />
                 </div>
-                @if (ViewBag.LoginError == null)
-                {
-
-                }
-                else
+                @if (ViewBag.LoginError != null)
                 {
                     <div class="alert alert-danger" role="alert">
                         @ViewBag.LoginError

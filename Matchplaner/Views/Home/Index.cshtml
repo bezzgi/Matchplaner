@@ -1,9 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Matches";
 
-    if (User.Identity.IsAuthenticated == true)
+    if (User.IsInRole("1"))
     {
         Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else if(User.IsInRole("0"))
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
     }
     else
     {
