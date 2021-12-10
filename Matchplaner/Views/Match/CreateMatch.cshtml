@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Admin erstellen";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@model matchHelper
+
+<div class="text-center container mb-5" style="margin-top: 8%;">
+    <div class="row justify-content-around">
+        <div style="border-radius: 15px;" class="shadow p-5 bg-white text-left col-5">
+            <strong style="font-size: 25px;">Admin erstellen</strong>
+            <br />
+            <br />
+            <form method="post">
+
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input type="text" placeholder="Hallenname" asp-for="Match.hallenname" class="form-control" />
+                    </div>
+                    <div class="form-group col">
+                        <input type="text" placeholder="Ort" asp-for="Match.ort" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input type="datetime" placeholder="Benutzername" asp-for="Match.datum" class="form-control" />
+                    </div>
+                    <div class="form-group col">
+                        <input type="time" placeholder="Passwort" asp-for="Match.uhrzeit" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <select class="custom-select form-group col" name="mannschaft">
+                        <option selected disabled>Mannschaft</option>
+                        @foreach (var man1 in Model.Mannschaften)
+                        {
+                            <option value="@man1.id_mannschaft">@man1.name</option>
+                        }
+                    </select>
+                    <select class="custom-select form-group col" name="mannschaft">
+                        <option selected disabled>Mannschaft</option>
+                        @foreach (var man2 in Model.Mannschaften)
+                        {
+                            <option value="@man2.id_mannschaft">@man2.name</option>
+                        }
+                    </select>
+                </div>
+
+
+                @if (ViewBag.CreateMatchError != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewBag.CreateMatchError
+                    </div>
+                }
+
+                @if (ViewBag.CreateMatchMessage != null)
+                {
+                    <div class="alert alert-info" role="alert">
+                        @ViewBag.CreateMatchMessage
+                    </div>
+                }
+
+                <div class="form-group">
+                    <input type="submit" value="Admin erstellen" name="CreateAdmin" class="form-control btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

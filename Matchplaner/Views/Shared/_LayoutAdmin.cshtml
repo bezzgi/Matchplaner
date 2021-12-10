@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -21,15 +22,15 @@
                     <li class='nav-item dropdown active'>
                         <a class='nav-link dropdown-toggle' href="dropdown" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Erstellen</a>
                         <div class='dropdown-menu' aria-labelledby='dropdown06'>
-                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Account" asp-action="CreateAdmin">Admin erstellen</a>
-                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Match erstellen</a>
+                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Admin" asp-action="CreateAdmin">Admin erstellen</a>
+                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Match" asp-action="CreateMatch">Match erstellen</a>
                         </div>
                     </li>
                     <li class='nav-item dropdown active'>
                         <a class='nav-link dropdown-toggle' href="dropdown" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Verwalten</a>
                         <div class='dropdown-menu' aria-labelledby='dropdown06'>
-                            <a class='dropdown-item' href='manageuser.php'>Benutzer</a>
-                            <a class='dropdown-item' href='managecategory.php'>Kategorien</a>
+                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Admin" asp-action="ShowAdmin">Admins</a>
+                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Match" asp-action="ShowMatch">Matches</a>
                         </div>
                     </li>
                 </ul>

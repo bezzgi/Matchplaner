@@ -1,4 +1,5 @@
-﻿ using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,15 +9,13 @@ using System.Threading.Tasks;
 
 namespace Matchplaner.Models
 {
-    public class Qualifikation
+    public class MhasM
     {
+
+        public int match_id_match { get; set; }
+
         [Key]
         [ReadOnly(true)]
-        public int id_qualifikation { get; set; }
-
-        public string name { get; set; }
-
-        [NotMapped]
-        public bool IsChecked { get; set; }
+        public int mannschaft_id_mannschaft { get; set; }
     }
 }

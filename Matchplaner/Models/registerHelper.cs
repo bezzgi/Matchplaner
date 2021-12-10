@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 
 namespace Matchplaner.Models
 {
-    [Keyless]
     public class registerHelper
     {
-        public Benutzer benutzer = new Benutzer();
+        public Benutzer Benutzer = new Benutzer();
 
-        public List<Mannschaft> mannschaft = new List<Mannschaft>();
+        public List<Mannschaft> Mannschaften = new List<Mannschaft>();
 
-        public List<Qualifikation> qualifikation = new List<Qualifikation>();
+        public List<Qualifikation> Qualifikationen = new List<Qualifikation>();
     }
 }

@@ -21,8 +21,6 @@ namespace Matchplaner.Controllers
 
         private DbMatchplaner _dbMatchplaner;
 
-        private registerHelper data = new registerHelper();
-
         public AccountController(DbMatchplaner dbMatchplaner)
         {
             _dbMatchplaner = dbMatchplaner;
@@ -60,96 +58,57 @@ namespace Matchplaner.Controllers
             
         }
 
-        public IActionResult Register(registerHelper registerModel)
+
+        public IActionResult Register()
         {
-            var mannschaft = _dbMatchplaner.Mannschaft.ToList();
+            registerHelper model = new registerHelper();
 
-            var qualifikation = _dbMatchplaner.Qualifikation.ToList();
+            model.Qualifikationen = _dbMatchplaner.Qualifikation.ToList();
 
-            registerModel.qualifikation = qualifikation;
-
-            registerModel.mannschaft = mannschaft;
+            model.Mannschaften = _dbMatchplaner.Mannschaft.ToList();
 
 
-            Benutzer benutzer = new Benutzer();
 
-            benutzer.gewaehlteQualifikation = qualifikation.Select(qualis => new CheckBoxItem()
-            {
-                id = qualis.id_qualifikation,
-                name = qualis.name,
-                isChecked = false
-            }).ToList();
-
-            registerModel.benutzer.gewaehlteQualifikation = benutzer.gewaehlteQualifikation;
-
-            return View(registerModel);
+            return View(model);
         }
 
+        //<>
 
         [HttpPost]
-        public IActionResult Register(Benutzer benutzer, BhasQ bhasq, registerHelper registerModel)
+        public IActionResult Register(registerHelper model, Benutzer benutzer)
         {
-            var mannschaft = _dbMatchplaner.Mannschaft.ToList();
+            model.Qualifikationen = _dbMatchplaner.Qualifikation.ToList();
 
-            var qualifikation = _dbMatchplaner.Qualifikation.ToList();
-
-            registerModel.qualifikation = qualifikation;
-
-            registerModel.mannschaft = mannschaft;
-
-
-            benutzer.gewaehlteQualifikation = qualifikation.Select(qualis => new CheckBoxItem()
-            {
-                id = qualis.id_qualifikation,
-                name = qualis.name,
-                isChecked = false
-            }).ToList();
-
-            registerModel.benutzer.gewaehlteQualifikation = benutzer.gewaehlteQualifikation;
+            model.Mannschaften = _dbMatchplaner.Mannschaft.ToList();
 
             benutzer.admin = 0;
 
             _dbMatchplaner.Benutzer.Add(benutzer);
 
+            var chosenQualifikationen = model.Qualifikationen.Where(x => x.IsChecked == true).ToList();
 
-
-            foreach (var item in registerModel.benutzer.gewaehlteQualifikation)
-            {
-                if (item.isChecked == true)
-                {
-                    bhasq.benutzer_id_benutzer = benutzer.id_benutzer;
-                    bhasq.qualifikation_id_qualifikation = item.id;
-                }
-            }
-
-            _dbMatchplaner.BenutzerHasQualifikation.Add(bhasq);
-
-            return View();
-        }
-
-
-        public IActionResult CreateAdmin()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult CreateAdmin(Benutzer benutzer)
-        {
-            try
-            {
-                _dbMatchplaner.Benutzer.Add(benutzer);
-
-                _dbMatchplaner.SaveChangesAsync();
-
-                ViewBag.CreateAdminMessage = "Der Admin wurde erfolgreich erstellt!";
-            }
-            catch(Exception e)
-            {
-                ViewBag.CreateAdminError = "Es ist ein Fehler aufgetreten: " + e.Message;
-            }
+            _dbMatchplaner.SaveChangesAsync();
 
             return View();
         }
     }
 }
+
+/*@for (int i = 0; i < Model.Qualifikation.Count; i++)
+{
+    @Html.CheckBoxFor(model => model.Qualifikation[i].IsChecked)
+                    @Html.DisplayFor(model => model.Qualifikation[i].name)
+                    @Html.HiddenFor(model => model.Qualifikation[i].id_qualifikation)
+                }
+
+
+
+
+@foreach(var registerModel in Model.Qualifikation)
+                {
+                    < div class= "form-check form-check-inline" >
+
+                         @Html.CheckBoxFor(model => registerModel.IsChecked)
+                        @Html.DisplayFor(model => registerModel.name)
+                        @Html.HiddenFor(model => registerModel.id_qualifikation)*/
+

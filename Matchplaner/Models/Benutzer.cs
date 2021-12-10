@@ -30,6 +30,6 @@ namespace Matchplaner.Models
 
         public int admin { get; set; }
 
-        public List<CheckBoxItem> gewaehlteQualifikation { get; set; }
+        public List<BhasQ> BenutzerHasQualifikation { get; set; }
     }
 }

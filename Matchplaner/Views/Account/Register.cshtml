@@ -14,47 +14,49 @@
             <form method="post">
                 <div class="form-row">
                     <div class="form-group col">
-                        <input type="text" placeholder="Vorname" asp-for="benutzer.vorname" class="form-control" />
+                        <input type="text" placeholder="Vorname" asp-for="Benutzer.vorname" class="form-control" />
                     </div>
                     <div class="form-group col">
-                        <input type="text" placeholder="Nachname" asp-for="benutzer.nachname" class="form-control" />
+                        <input type="text" placeholder="Nachname" asp-for="Benutzer.nachname" class="form-control" />
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col">
-                        <input type="text" placeholder="Benutzername" asp-for="benutzer.benutzername" class="form-control" />
+                        <input type="text" placeholder="Benutzername" asp-for="Benutzer.benutzername" class="form-control" />
                     </div>
                     <div class="form-group col">
-                        <input type="password" placeholder="Passwort" asp-for="benutzer.passwort" class="form-control" />
+                        <input type="password" placeholder="Passwort" asp-for="Benutzer.passwort" class="form-control" />
                     </div>
                 </div>
-                @foreach (var register in Model.benutzer.gewaehlteQualifikation)
+
+                @for (int i = 0; i < Model.Qualifikationen.Count; i++)
                 {
-            <div class="form-check form-check-inline">
-                @Html.HiddenFor(Qualifikation => register.id)
-                @Html.CheckBoxFor(Qualifikation => register.isChecked)
-                @Html.DisplayFor(Qualifikation => register.name)
-                
-            </div>
+                    @Html.CheckBoxFor(model => model.Qualifikationen[i].IsChecked)
+                    <label>@Model.Qualifikationen[i].name</label>
+                    @Html.HiddenFor(model => model.Qualifikationen[i].name)
+                    @Html.HiddenFor(model => model.Qualifikationen[i].id_qualifikation)
                 }
-                <br />
-                <br />
-                <div class="form-group">
-                    <select class="custom-select" id="mannschaft" asp-for="mannschaft">
-                        <option selected disabled>Mannschaft</option>
-                        @foreach (var register in Model.mannschaft)
-                        {
-                            <option>@register.name</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Registrieren" name="Register" class="form-control btn btn-primary" />
-                </div>
-                <div>
-                    Du hast bereits ein Konto? <a asp-controller="Account" asp-action="Anmelden">Melde dich an!</a>
-                </div>
-            </form>
+
+
+
+    <br />
+    <br />
+    <div class="form-group">
+        <select class="custom-select" asp-for="Mannschaften">
+            <option selected disabled>Mannschaft</option>
+            @foreach (var registerModel in Model.Mannschaften)
+            {
+                <option>@registerModel.name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Registrieren" class="form-control btn btn-primary" />
+    </div>
+    <div>
+        Du hast bereits ein Konto? <a asp-controller="Account" asp-action="Anmelden">Melde dich an!</a>
+    </div>
+</form>
         </div>
     </div>
 </div>

@@ -22,8 +22,10 @@ namespace Matchplaner.Helpers
 
         public DbSet<Benutzer> Benutzer { set; get; }
 
-        public DbSet<BhasM> BenutzerHasMannschaft { set; get; }
+        public DbSet<BhasM> Benutzer_Has_Mannschaft { set; get; }
 
-        public DbSet<BhasQ> BenutzerHasQualifikation { set; get; }
+        public DbSet<BhasQ> Benutzer_Has_Qualifikation { set; get; }
+
+        public DbSet<MhasM> Match_Has_Mannschaft { set; get; }
     }
 }

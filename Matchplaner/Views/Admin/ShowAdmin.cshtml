@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Admin erstellen";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Besitzer Page";
+}
+
+@model IEnumerable<Benutzer>
+
+<div class="text-left">
+    <h1 class="display-4">Verwalten Besitzer</h1>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Vorname</th>
+                    <th>Nachname</th>
+                    <th>Benutzername</th>
+                    <th>Löschen</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var besitzer in Model)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => besitzer.vorname)</td>
+                    <td>@Html.DisplayFor(modelItem => besitzer.nachname)</td>
+                    <td>@Html.DisplayFor(modelItem => besitzer.benutzername)</td>
+                    @if (besitzer.benutzername != "Administrator")
+                    {
+                        <td>
+                            <a asp-action="DeleteAdmin" class="text-primary" asp-route-rowguid="@besitzer.id_benutzer"><i class="bi bi-trash"></i></a>
+                        </td>
+                    }
+                </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
