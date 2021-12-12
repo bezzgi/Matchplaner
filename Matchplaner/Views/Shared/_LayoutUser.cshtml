@@ -18,22 +18,9 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <ul class='navbar-nav mr-auto'>
-                    <li class='nav-item dropdown active'>
-                        <a class='nav-link dropdown-toggle' href="dropdown" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Erstellen</a>
-                        <div class='dropdown-menu' aria-labelledby='dropdown06'>
-                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Account" asp-action="CreateAdmin">Admin erstellen</a>
-                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Match erstellen</a>
-                        </div>
-                    </li>
-                    <li class='nav-item dropdown active'>
-                        <a class='nav-link dropdown-toggle' href="dropdown" data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Verwalten</a>
-                        <div class='dropdown-menu' aria-labelledby='dropdown06'>
-                            <a class='dropdown-item' href='manageuser.php'>Benutzer</a>
-                            <a class='dropdown-item' href='managecategory.php'>Kategorien</a>
-                        </div>
-                    </li>
-                </ul>
+                <div class="nav-item">
+                    <a class="nav-link text-dark"  asp-controller="Account" asp-route-id_benutzer="@User.Identity.Name" asp-action="EditBenutzer">Benutzerprofil bearbeiten</a>
+                </div>
 
                 <div class="nav-item ml-auto">
                     <ul class="navbar-nav ml-auto">

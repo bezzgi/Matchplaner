@@ -28,8 +28,18 @@ namespace Matchplaner.Models
         [DataType(DataType.Password)]
         public string passwort { get; set; }
 
+        [Required]
+        public int? fk_mannschaft_id { get; set; }
+
+        public int is_schiedsrichter { get; set; }
+
+        public int is_spieler { get; set; }
+
+        public int is_punkteschreiber { get; set; }
+
         public int admin { get; set; }
 
-        public List<BhasQ> BenutzerHasQualifikation { get; set; }
+        [ForeignKey("benutzer_id_benutzer")]
+        public List<MhasB> Match_Has_Benutzer { get; set; }
     }
 }

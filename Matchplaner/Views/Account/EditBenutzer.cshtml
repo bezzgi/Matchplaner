@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Benutzerprofil bearbeiten";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+@model Benutzer
+
+<div class="text-center container mb-5" style="margin-top: 8%;">
+    <div class="row justify-content-around">
+        <div style="border-radius: 15px;" class="shadow p-5 bg-white text-left col-5">
+            <strong style="font-size: 25px;">Benutzerprofil bearbeiten</strong>
+            <br />
+            <br />
+            <form method="post">
+                <div class="row">
+                    <div class="form-group col">
+                        Vorname
+                        <input asp-for="vorname" id="vorname" class="form-control" />
+                    </div>
+                    <div class="form-group col">
+                        Nachname
+                        <input asp-for="nachname" id="nachname" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col">
+                        Passwort
+                        <input asp-for="passwort" id="passwort" class="form-control" />
+                    </div>
+                </div>
+
+                @if (ViewBag.EditError != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewBag.EditError
+                    </div>
+                }
+
+                @if (ViewBag.EditMessage != null)
+                {
+                    <div class="alert alert-info" role="alert">
+                        @ViewBag.EditMessage
+                    </div>
+                }
+
+
+                <div class="form-group">
+                    <input class="btn btn-primary" type="submit" value="Speichern" />
+                    <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Zurück</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

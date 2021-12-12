@@ -23,13 +23,20 @@
 
     @foreach (var match in Model)
     {
-        var datum = match.datum.ToString("M");
+        var datum = match.datum.ToString("D");
         var uhrzeit = match.uhrzeit.ToString("t");
 
-        <div style="border-radius: 20px;" class="shadow p-3 mb-5 bg-white text-left">
+        <div style="border-radius: 20px;" class="shadow p-3 mb-3 bg-white text-left">
             <p><strong>@match.hallenname, </strong>@match.ort</p>
             <p><strong>@datum, </strong>@uhrzeit</p>
             <p>Mannschaft 1 vs. Mannschaft 2</p>
+
+            @if (User.IsInRole("0"))
+            {
+                <a asp-controller="Match" asp-action="DetailsMatch" asp-route-rowguid="@match.id_match" class="btn btn-primary">Match anzeigen</a>
+            }
+
+
         </div>
     }
 

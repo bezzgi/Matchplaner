@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Match Details";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+
+}
+
+@model matchHelper
+
+<div class="text-left container mb-5" style="margin-top: 5%;">
+    <strong style="font-size: 25px;">Match Details</strong>
+    <br />
+    <br />
+
+    @{
+        var datum = Model.Match.datum.ToString("D");
+        var uhrzeit = Model.Match.uhrzeit.ToString("t");
+    }
+
+    <p>
+        <div class="bg-white d-flex justify-content-between">
+            <div><strong>Hallenname: </strong>@Model.Match.hallenname</div>
+            <div>Spieler: @ViewBag.countSpieler</div>
+        </div>
+    </p>
+    <p>
+        <div class="bg-white d-flex justify-content-between">
+            <div><strong>Ortschaft: </strong>@Model.Match.ort</div>
+            <div>Schiedsrichter: @ViewBag.countSchiedsrichter</div>
+        </div>
+    </p>
+    <p>
+        <div class="bg-white d-flex justify-content-between">
+            <div><strong>Datum: </strong>@Model.Match.datum</div>
+            <div>Punkteschreiber: @ViewBag.countPunkteschreiber</div>
+        </div>
+    </p>
+
+
+    <div style="border-radius: 20px;" class="bg-white text-left">
+        <p><strong>Uhrzeit: </strong>@uhrzeit</p>
+
+        @foreach (var mannschaft in Model.Mannschaften)
+        {
+            <p>@mannschaft.name</p>
+        }
+        @if (Model.Benutzer.is_spieler == 1)
+        {
+            <p>Als Spieler eintragen: <a asp-action="Spieler" asp-route-rowguid="@Model.Match.id_match"><i class="bi bi-pencil"></i></a></p>
+        }
+        @if (Model.Benutzer.is_schiedsrichter == 1)
+        {
+            <p>Als Schiedsrichter eintragen: <a asp-action="Schiedsrichter" asp-route-rowguid="@Model.Match.id_match"><i class="bi bi-pencil"></i></a></p>
+        }
+        @if (Model.Benutzer.is_punkteschreiber == 1)
+        {
+            <p>Als Punkteschreiber eintragen: <a asp-action="Punkteschreiber" asp-route-rowguid="@Model.Match.id_match"> <i class="bi bi-pencil"></i></a></p>
+        }
+
+
+        @if (ViewBag.MatchError != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.MatchError
+            </div>
+        }
+
+        @if (Model.MhasB != null)
+        {
+            @if (Model.MhasB.benutzer_id_benutzer.ToString() == User.Identity.Name && Model.MhasB.benutzer_is_punkteschreiber == 1 || Model.MhasB.benutzer_id_benutzer.ToString() == User.Identity.Name && Model.MhasB.benutzer_is_schiedsrichter == 1 || Model.MhasB.benutzer_id_benutzer.ToString() == User.Identity.Name && Model.MhasB.benutzer_is_spieler == 1)
+            {
+                <a asp-controller="Match" asp-action="DeleteFromMatch" asp-route-rowguid="@Model.Match.id_match" class="btn btn-primary">Vom Match abmelden</a>
+            }
+        }
+
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Zurück</a>
+
+    </div>
+
+</div>

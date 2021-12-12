@@ -29,34 +29,43 @@
                     </div>
                 </div>
 
-                @for (int i = 0; i < Model.Qualifikationen.Count; i++)
+
+                @foreach (var qualifikation in Model.Qualifikationen)
                 {
-                    @Html.CheckBoxFor(model => model.Qualifikationen[i].IsChecked)
-                    <label>@Model.Qualifikationen[i].name</label>
-                    @Html.HiddenFor(model => model.Qualifikationen[i].name)
-                    @Html.HiddenFor(model => model.Qualifikationen[i].id_qualifikation)
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="qualifikation" id="@qualifikation.id_qualifikation" value="@qualifikation.id_qualifikation" onclick="toggleSelect()">
+                        <label class="form-check-label" for="@qualifikation.id_qualifikation">@qualifikation.name</label>
+                    </div>
                 }
+                    
 
 
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <select class="custom-select" id="mannschaft" name="mannschaft">
+                            <option selected disabled>Mannschaft</option>
+                            @foreach (var mannschaft in Model.Mannschaften)
+                            {
+                                <option value="@mannschaft.id_mannschaft">@mannschaft.name</option>
+                            }
+                        </select>
+                    </div>
 
-    <br />
-    <br />
-    <div class="form-group">
-        <select class="custom-select" asp-for="Mannschaften">
-            <option selected disabled>Mannschaft</option>
-            @foreach (var registerModel in Model.Mannschaften)
-            {
-                <option>@registerModel.name</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Registrieren" class="form-control btn btn-primary" />
-    </div>
-    <div>
-        Du hast bereits ein Konto? <a asp-controller="Account" asp-action="Anmelden">Melde dich an!</a>
-    </div>
-</form>
+                    @if (ViewBag.RegisterError != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.RegisterError
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <input type="submit" value="Registrieren" class="form-control btn btn-primary" />
+                    </div>
+                    <div>
+                        Du hast bereits ein Konto? <a asp-controller="Account" asp-action="Anmelden">Melde dich an!</a>
+                    </div>
+                </form>
         </div>
     </div>
 </div>

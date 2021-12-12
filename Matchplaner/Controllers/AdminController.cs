@@ -2,6 +2,7 @@
 using Matchplaner.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestSharp;
@@ -27,17 +28,20 @@ namespace Matchplaner.Controllers
         {
             _dbMatchplaner = dbMatchplaner;
         }
-
+        [Authorize(Roles = "1")]
         public IActionResult CreateAdmin()
         {
             return View();
         }
 
+        [Authorize(Roles = "1")]
         [HttpPost]
         public IActionResult CreateAdmin(Benutzer benutzer)
         {
             try
             {
+                benutzer.fk_mannschaft_id = 1;
+
                 _dbMatchplaner.Benutzer.Add(benutzer);
 
                 _dbMatchplaner.SaveChangesAsync();
@@ -52,14 +56,15 @@ namespace Matchplaner.Controllers
             return View();
         }
 
-
+        [Authorize(Roles = "1")]
         public IActionResult ShowAdmin()
         {
-            var benutzer = _dbMatchplaner.Benutzer.ToList();
+            var benutzer = _dbMatchplaner.Benutzer.Where(b => b.admin == 1).ToList();
 
             return View(benutzer);
         }
 
+        [Authorize(Roles = "1")]
         public async Task<IActionResult> DeleteAdmin(int? rowguid)
         {
             if (rowguid == null)
@@ -83,22 +88,3 @@ namespace Matchplaner.Controllers
         
     }
 }
-
-/*@for (int i = 0; i < Model.Qualifikation.Count; i++)
-{
-    @Html.CheckBoxFor(model => model.Qualifikation[i].IsChecked)
-                    @Html.DisplayFor(model => model.Qualifikation[i].name)
-                    @Html.HiddenFor(model => model.Qualifikation[i].id_qualifikation)
-                }
-
-
-
-
-@foreach(var registerModel in Model.Qualifikation)
-                {
-                    < div class= "form-check form-check-inline" >
-
-                         @Html.CheckBoxFor(model => registerModel.IsChecked)
-                        @Html.DisplayFor(model => registerModel.name)
-                        @Html.HiddenFor(model => registerModel.id_qualifikation)*/
-

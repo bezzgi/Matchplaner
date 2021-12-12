@@ -13,6 +13,16 @@ namespace Matchplaner.Models
     {
         public Match Match = new Match();
 
+        public List<Match> Matches = new List<Match>();
+
+        public Mannschaft Mannschaft = new Mannschaft();
+
         public List<Mannschaft> Mannschaften = new List<Mannschaft>();
+
+        public Benutzer Benutzer = new Benutzer();
+
+        public List<Benutzer> BenutzerList = new List<Benutzer>();
+
+        public MhasB MhasB = new MhasB();
     }
 }

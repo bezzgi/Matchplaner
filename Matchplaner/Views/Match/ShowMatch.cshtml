@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Admin erstellen";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Matches verwalten";
+
+}
+
+@model IEnumerable<Match>
+
+<div class="text-left">
+    <h1 class="display-4">Matches verwalten</h1>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ort</th>
+                    <th>Hallenname</th>
+                    <th>Datum</th>
+                    <th>Löschen</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var match in Model)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => match.ort)</td>
+                    <td>@Html.DisplayFor(modelItem => match.hallenname)</td>
+                    <td>@Html.DisplayFor(modelItem => match.datum)</td>
+
+
+                    <td>
+                        <a asp-action="DeleteMatch" class="text-primary" asp-route-rowguid="@match.id_match"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
