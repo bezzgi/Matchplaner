@@ -30,7 +30,7 @@
     </p>
     <p>
         <div class="bg-white d-flex justify-content-between">
-            <div><strong>Datum: </strong>@Model.Match.datum</div>
+            <div><strong>Datum: </strong>@datum</div>
             <div>Punkteschreiber: @ViewBag.countPunkteschreiber</div>
         </div>
     </p>
@@ -39,10 +39,11 @@
     <div style="border-radius: 20px;" class="bg-white text-left">
         <p><strong>Uhrzeit: </strong>@uhrzeit</p>
 
-        @foreach (var mannschaft in Model.Mannschaften)
+        @foreach(var mannschaft in Model.Mannschaften)
         {
             <p>@mannschaft.name</p>
         }
+
         @if (Model.Benutzer.is_spieler == 1)
         {
             <p>Als Spieler eintragen: <a asp-action="Spieler" asp-route-rowguid="@Model.Match.id_match"><i class="bi bi-pencil"></i></a></p>
@@ -66,7 +67,7 @@
 
         @if (Model.MhasB != null)
         {
-            @if (Model.MhasB.benutzer_id_benutzer.ToString() == User.Identity.Name && Model.MhasB.benutzer_is_punkteschreiber == 1 || Model.MhasB.benutzer_id_benutzer.ToString() == User.Identity.Name && Model.MhasB.benutzer_is_schiedsrichter == 1 || Model.MhasB.benutzer_id_benutzer.ToString() == User.Identity.Name && Model.MhasB.benutzer_is_spieler == 1)
+            @if (Model.MhasB.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name) && Model.MhasB.benutzer_is_punkteschreiber == 1 || Model.MhasB.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name) && Model.MhasB.benutzer_is_schiedsrichter == 1 || Model.MhasB.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name) && Model.MhasB.benutzer_is_spieler == 1)
             {
                 <a asp-controller="Match" asp-action="DeleteFromMatch" asp-route-rowguid="@Model.Match.id_match" class="btn btn-primary">Vom Match abmelden</a>
             }

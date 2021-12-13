@@ -40,27 +40,21 @@ namespace Matchplaner.Controllers
         }
 
         [Authorize(Roles = "0")]
-        public IActionResult DetailsMatch(int? rowguid, matchHelper model)
+        public IActionResult DetailsMatch(int rowguid, matchHelper model)
         {
-            /*var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.mannschaft_).Where(m => m.match_id_match == rowguid).Select(m => m.mannschaft_).ToList();
+            var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Where(m => m.match_id_match == rowguid).Select(m => m.Mannschaft).ToList();
 
-            model.Mannschaften = mannschaft;*/
+            model.Mannschaften = mannschaft;
 
-            if(rowguid != null)
-            {
-                model.MhasB = _dbMatchplaner.Match_Has_Benutzer.FirstOrDefault(b => b.match_id_match == rowguid && b.benutzer_id_benutzer.ToString() == User.Identity.Name);
-            }
-            else
-            {
-                return NotFound();
-            }
+            var mhasb = _dbMatchplaner.Match_Has_Benutzer.FirstOrDefault(b => b.match_id_match == rowguid && b.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name));
+
+            model.MhasB = mhasb;
+            
 
             model.Match = _dbMatchplaner.Match.Where(m => m.id_match == rowguid).FirstOrDefault();
 
             ViewBag.countSpieler = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_spieler == 1);
-
             ViewBag.countSchiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_schiedsrichter == 1);
-
             ViewBag.countPunkteschreiber = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_punkteschreiber == 1);
 
             model.Benutzer = _dbMatchplaner.Benutzer.Where(b => b.id_benutzer.ToString() == User.Identity.Name).FirstOrDefault();
