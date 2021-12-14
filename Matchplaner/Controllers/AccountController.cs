@@ -62,6 +62,9 @@ namespace Matchplaner.Controllers
         }
 
 
+
+
+
         //Register
         public IActionResult Register()
         {
@@ -131,6 +134,12 @@ namespace Matchplaner.Controllers
             return RedirectToAction(nameof(Login));
         }
 
+
+
+
+
+
+
         [Authorize(Roles = "0")]
         public IActionResult EditBenutzer(string id_benutzer)
         {
@@ -164,6 +173,20 @@ namespace Matchplaner.Controllers
 
 
             return View();
+        }
+
+
+
+
+        public IActionResult DeleteBenutzer()
+        {
+            var benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.id_benutzer == Convert.ToInt32(User.Identity.Name));
+
+            _dbMatchplaner.Remove(benutzer);
+
+            _dbMatchplaner.SaveChanges();
+
+            return RedirectToAction("Logout", "Home");
         }
     }
 }

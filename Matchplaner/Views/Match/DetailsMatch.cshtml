@@ -16,33 +16,42 @@
         var uhrzeit = Model.Match.uhrzeit.ToString("t");
     }
 
+    @{
+        int i = 0;
+    }
+    @foreach (var mannschaft in Model.Mannschaften)
+    {
+        <div style="display: inline; font-size: 25px;">@mannschaft.name</div>
+        if (i == 0)
+        {
+            <strong style="font-size: 25px;"> VS. </strong>
+        }
+        i++;
+    }
+
     <p>
-        <div class="bg-white d-flex justify-content-between">
+        <div class="d-flex justify-content-between">
             <div><strong>Hallenname: </strong>@Model.Match.hallenname</div>
             <div>Spieler: @ViewBag.countSpieler</div>
         </div>
     </p>
     <p>
-        <div class="bg-white d-flex justify-content-between">
+        <div class="d-flex justify-content-between">
             <div><strong>Ortschaft: </strong>@Model.Match.ort</div>
             <div>Schiedsrichter: @ViewBag.countSchiedsrichter</div>
         </div>
     </p>
     <p>
-        <div class="bg-white d-flex justify-content-between">
+        <div class="d-flex justify-content-between">
             <div><strong>Datum: </strong>@datum</div>
             <div>Punkteschreiber: @ViewBag.countPunkteschreiber</div>
         </div>
     </p>
 
 
-    <div style="border-radius: 20px;" class="bg-white text-left">
+    <div style="border-radius: 20px;" class="text-left">
         <p><strong>Uhrzeit: </strong>@uhrzeit</p>
 
-        @foreach(var mannschaft in Model.Mannschaften)
-        {
-            <p>@mannschaft.name</p>
-        }
 
         @if (Model.Benutzer.is_spieler == 1)
         {

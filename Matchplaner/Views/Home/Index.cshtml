@@ -15,29 +15,45 @@
     }
 }
 
-@model IEnumerable<Match>
+@model homeHelper
 
 <div class="text-center">
     <h1 class="display-4">Alle Matches</h1>
     <br />
 
-    @foreach (var match in Model)
+    @foreach (var match in Model.Matches)
     {
         var datum = match.datum.ToString("D");
         var uhrzeit = match.uhrzeit.ToString("t");
 
-        <div style="border-radius: 20px;" class="shadow p-3 mb-3 bg-white text-left">
-            <p><strong>@match.hallenname, </strong>@match.ort</p>
-            <p><strong>@datum, </strong>@uhrzeit</p>
-            <p>Mannschaft 1 vs. Mannschaft 2</p>
+    <div style="border-radius: 20px;" class="shadow p-3 mb-3 bg-white text-left">
 
-            @if (User.IsInRole("0"))
+        @{
+            int i = 0;
+        }
+        @foreach (var mannschaft in Model.Mannschaften)
+        {
+            <div style="display: inline; font-size: 25px;">@mannschaft.name</div>
+            if (i == 0)
             {
-                <a asp-controller="Match" asp-action="DetailsMatch" asp-route-rowguid="@match.id_match" class="btn btn-primary">Match anzeigen</a>
+                <strong style="font-size: 25px;">  VS. </strong>
             }
+            i++;
+        }
+
+        <br />
+        <br />
+
+        <p style="font-size: 20px;"><strong>@datum, </strong>@uhrzeit</p>
+        <p style="font-size: 20px;"><strong>@match.hallenname, </strong>@match.ort</p>
+
+        @if (User.IsInRole("0"))
+        {
+            <a asp-controller="Match" asp-action="DetailsMatch" asp-route-rowguid="@match.id_match" class="btn btn-primary">Match anzeigen</a>
+        }
 
 
-        </div>
-    }
+    </div>
+        }
 
 </div>

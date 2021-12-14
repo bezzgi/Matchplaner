@@ -46,7 +46,7 @@ namespace Matchplaner.Controllers
 
             model.Mannschaften = mannschaft;
 
-            var mhasb = _dbMatchplaner.Match_Has_Benutzer.FirstOrDefault(b => b.match_id_match == rowguid && b.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name));
+            var mhasb = _dbMatchplaner.Match_Has_Benutzer.FirstOrDefault(b => b.match_id_match == rowguid && b.benutzer_id_benutzer.ToString() == User.Identity.Name);
 
             model.MhasB = mhasb;
             
@@ -85,24 +85,18 @@ namespace Matchplaner.Controllers
             }
             else
             {
-                _dbMatchplaner.Match.Add(match);
 
-                _dbMatchplaner.SaveChanges();
-
-                var id_match = _dbMatchplaner.Match.Where(m => m.id_match == match.id_match).FirstOrDefault();
+                mhasm.match_id_match = match.id_match;
 
                 foreach (var data in mannschaft)
                 {
-                    mhasm.match_id_match = id_match.id_match;
                     mhasm.mannschaft_id_mannschaft = Convert.ToInt32(data);
 
                     _dbMatchplaner.Match_Has_Mannschaft.Add(mhasm);
 
-
-                    _dbMatchplaner.SaveChanges();
-
                     ViewBag.CreateMatchMessage = "Das Match wurde erfolgreich erstellt!";
 
+                    _dbMatchplaner.SaveChanges();
                 }
 
                 return View(model);
@@ -225,7 +219,7 @@ namespace Matchplaner.Controllers
 
             _dbMatchplaner.Match_Has_Benutzer.Remove(mhasb);
 
-            _dbMatchplaner.SaveChangesAsync();
+            _dbMatchplaner.SaveChanges();
 
             return RedirectToAction("DetailsMatch", new { rowguid });
         }

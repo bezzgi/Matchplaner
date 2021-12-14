@@ -26,9 +26,17 @@ namespace Matchplaner.Controllers
 
         public async Task<IActionResult> Index()
         {
+            homeHelper model = new homeHelper();
+
             var match = await _dbMatchplaner.Match.ToListAsync();
 
-            return View(match);
+            model.Matches = match;
+
+            var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Select(m => m.Mannschaft).ToList();
+
+            model.Mannschaften = mannschaft;
+
+            return View(model);
         }
 
 

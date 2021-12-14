@@ -48,9 +48,9 @@ namespace Matchplaner.Controllers
 
                 ViewBag.CreateAdminMessage = "Der Admin wurde erfolgreich erstellt!";
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                ViewBag.CreateAdminError = "Es ist ein Fehler aufgetreten: " + e.Message;
+                ViewBag.CreateAdminError = "Es ist ein Fehler aufgetreten.";
             }
 
             return View();
