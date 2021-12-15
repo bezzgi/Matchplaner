@@ -123,6 +123,7 @@ namespace Matchplaner.Controllers
             }
             else
             {
+                //hier nehme ich einfach den Wert 1, da der Fremdschlüssel nicht null sein darf. Dieser Wert hat später keinen Einfluss auf das Progrmam
                 benutzer.fk_mannschaft_id = 1;
             }
 
@@ -130,6 +131,8 @@ namespace Matchplaner.Controllers
             _dbMatchplaner.Benutzer.Add(benutzer);
 
             _dbMatchplaner.SaveChanges();
+
+            TempData["RegisterSuccess"] = "Ihr Benutzerkonto wurde erstellt.";
 
             return RedirectToAction(nameof(Login));
         }

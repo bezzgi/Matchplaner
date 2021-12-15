@@ -30,7 +30,7 @@ namespace Matchplaner.Models
 
         [Required]
         [ReadOnly(true)]
-        public int? fk_mannschaft_id { get; set; }
+        public int fk_mannschaft_id { get; set; }
 
         public int is_schiedsrichter { get; set; }
 

@@ -192,6 +192,9 @@ namespace Matchplaner.Controllers
 
             var benutzer = await _dbMatchplaner.Benutzer.FirstOrDefaultAsync(b => b.id_benutzer.ToString() == User.Identity.Name);
 
+            var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Where(m => m.match_id_match == rowguid).Select(m => m.Mannschaft).ToList();
+            
+
             mhasb.match_id_match = rowguid;
 
             mhasb.benutzer_id_benutzer = benutzer.id_benutzer;
@@ -200,9 +203,28 @@ namespace Matchplaner.Controllers
 
             try
             {
-                _dbMatchplaner.Match_Has_Benutzer.Add(mhasb);
+                int i = 0;
 
-                _dbMatchplaner.SaveChanges();
+                foreach (var data in mannschaft)
+                {
+                    i++;
+
+                    if (data.id_mannschaft == benutzer.fk_mannschaft_id)
+                    {
+                        _dbMatchplaner.Match_Has_Benutzer.Add(mhasb);
+
+                        _dbMatchplaner.SaveChanges();
+
+                        break;
+                    }
+                    else
+                    {
+                        if(i != 1)
+                        {
+                            TempData["MannschaftMessage"] = "Sie Spielen in keiner der beiden Mannschaften.";
+                        }
+                    }
+                }
             }
             catch (Exception)
             {

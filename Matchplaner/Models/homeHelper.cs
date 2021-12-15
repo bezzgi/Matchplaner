@@ -22,5 +22,7 @@ namespace Matchplaner.Models
         public Benutzer Benutzer = new Benutzer();
 
         public List<Benutzer> BenutzerList = new List<Benutzer>();
+
+        public List<MhasM> MhasM = new List<MhasM>();
     }
 }

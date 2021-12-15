@@ -74,6 +74,13 @@
             </div>
         }
 
+        @if (TempData["MannschaftMessage"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["MannschaftMessage"]
+            </div>
+        }
+
         @if (Model.MhasB != null)
         {
             @if (Model.MhasB.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name) && Model.MhasB.benutzer_is_punkteschreiber == 1 || Model.MhasB.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name) && Model.MhasB.benutzer_is_schiedsrichter == 1 || Model.MhasB.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name) && Model.MhasB.benutzer_is_spieler == 1)

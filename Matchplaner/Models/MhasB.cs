@@ -10,7 +10,6 @@ namespace Matchplaner.Models
 {
     public class MhasB
     {
-        [Key]
         [ReadOnly(true)]
         public int match_id_match { get; set; }
 

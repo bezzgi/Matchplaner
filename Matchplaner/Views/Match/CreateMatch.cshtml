@@ -30,16 +30,16 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <select class="custom-select form-group col" name="mannschaft">
-                        <option selected disabled>Mannschaft</option>
+                <div class="form">
+                    <select class="custom-select form-group" name="mannschaft">
+                        <option selected disabled>1. Mannschaft</option>
                         @foreach (var man1 in Model.Mannschaften)
                         {
                             <option value="@man1.id_mannschaft">@man1.name</option>
                         }
                     </select>
-                    <select class="custom-select form-group col" name="mannschaft">
-                        <option selected disabled>Mannschaft</option>
+                    <select class="custom-select form-group" name="mannschaft">
+                        <option selected disabled>2. Mannschaft</option>
                         @foreach (var man2 in Model.Mannschaften)
                         {
                             <option value="@man2.id_mannschaft">@man2.name</option>

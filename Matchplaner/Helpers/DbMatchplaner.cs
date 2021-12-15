@@ -27,5 +27,12 @@ namespace Matchplaner.Helpers
         public DbSet<MhasM> Match_Has_Mannschaft { set; get; }
 
         public DbSet<MhasB> Match_Has_Benutzer { set; get; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<MhasB>().HasKey(k => new { k.match_id_match, k.benutzer_id_benutzer });
+        }
     }
 }
