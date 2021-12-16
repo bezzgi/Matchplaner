@@ -11,6 +11,7 @@
 @model IEnumerable<Match>
 
 <div class="text-left">
+    <a asp-controller="Home" asp-action="Index" class=""><i class="bi bi-arrow-left-circle" style="font-size: 25px;"></i></a><br />
     <h1 class="display-4">Matches verwalten</h1>
     <div class="table-responsive">
         <table class="table">
@@ -25,16 +26,16 @@
             <tbody>
                 @foreach (var match in Model)
                 {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => match.ort)</td>
-                    <td>@Html.DisplayFor(modelItem => match.hallenname)</td>
-                    <td>@Html.DisplayFor(modelItem => match.datum)</td>
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => match.ort)</td>
+                        <td>@Html.DisplayFor(modelItem => match.hallenname)</td>
+                        <td>@Html.DisplayFor(modelItem => match.datum)</td>
 
 
-                    <td>
-                        <a asp-action="DeleteMatch" class="text-primary" asp-route-rowguid="@match.id_match"><i class="bi bi-trash"></i></a>
-                    </td>
-                </tr>
+                        <td>
+                            <a asp-action="DeleteMatch" class="text-primary" asp-route-rowguid="@match.id_match"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

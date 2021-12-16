@@ -39,7 +39,7 @@ namespace Matchplaner.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "0")]
+
         public IActionResult DetailsMatch(int rowguid, matchHelper model)
         {
             var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Where(m => m.match_id_match == rowguid).Select(m => m.Mannschaft).ToList();
@@ -57,7 +57,14 @@ namespace Matchplaner.Controllers
             ViewBag.countSchiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_schiedsrichter == 1);
             ViewBag.countPunkteschreiber = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_punkteschreiber == 1);
 
-            model.Benutzer = _dbMatchplaner.Benutzer.Where(b => b.id_benutzer.ToString() == User.Identity.Name).FirstOrDefault();
+            if(User.Identity.Name != null)
+            {
+                model.Benutzer = _dbMatchplaner.Benutzer.Where(b => b.id_benutzer.ToString() == User.Identity.Name).FirstOrDefault();
+            }
+            else
+            {
+                model.Benutzer = _dbMatchplaner.Benutzer.FirstOrDefault();
+            }
 
             return View(model);
         }
@@ -138,6 +145,13 @@ namespace Matchplaner.Controllers
 
             var benutzer = await _dbMatchplaner.Benutzer.FirstOrDefaultAsync(b => b.id_benutzer.ToString() == User.Identity.Name);
 
+            if (benutzer.is_schiedsrichter != 1)
+            {
+                TempData["MannschaftMessage"] = "Sie sind kein Schiedsrichter.";
+
+                return RedirectToAction("DetailsMatch", new { rowguid });
+            }
+
             mhasb.match_id_match = rowguid;
 
             mhasb.benutzer_id_benutzer = benutzer.id_benutzer;
@@ -165,6 +179,13 @@ namespace Matchplaner.Controllers
 
             var benutzer = await _dbMatchplaner.Benutzer.FirstOrDefaultAsync(b => b.id_benutzer.ToString() == User.Identity.Name);
 
+            if (benutzer.is_punkteschreiber != 1)
+            {
+                TempData["MannschaftMessage"] = "Sie sind kein Punkteschreiber.";
+
+                return RedirectToAction("DetailsMatch", new { rowguid });
+            }
+
             mhasb.match_id_match = rowguid;
 
             mhasb.benutzer_id_benutzer = benutzer.id_benutzer;
@@ -191,6 +212,13 @@ namespace Matchplaner.Controllers
             MhasB mhasb = new MhasB();
 
             var benutzer = await _dbMatchplaner.Benutzer.FirstOrDefaultAsync(b => b.id_benutzer.ToString() == User.Identity.Name);
+
+            if (benutzer.is_spieler != 1)
+            {
+                TempData["MannschaftMessage"] = "Sie sind kein Spieler.";
+
+                return RedirectToAction("DetailsMatch", new { rowguid });
+            }
 
             var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Where(m => m.match_id_match == rowguid).Select(m => m.Mannschaft).ToList();
             

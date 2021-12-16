@@ -28,7 +28,7 @@ namespace Matchplaner.Controllers
         {
             homeHelper model = new homeHelper();
 
-            var match = await _dbMatchplaner.Match.ToListAsync();
+            var match = await _dbMatchplaner.Match.OrderBy(m => m.id_match).ToListAsync();
 
             var mhash = await _dbMatchplaner.Match_Has_Mannschaft.ToListAsync();
 
@@ -36,7 +36,7 @@ namespace Matchplaner.Controllers
 
             model.Matches = match;
 
-            var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Select(m => m.Mannschaft).ToList();
+            var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.OrderBy(o => o.match_id_match).Include(x => x.Mannschaft).Select(m => m.Mannschaft).ToList();
 
             model.Mannschaften = mannschaft;
 

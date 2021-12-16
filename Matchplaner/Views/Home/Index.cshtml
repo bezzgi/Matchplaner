@@ -19,41 +19,46 @@
 
 <div class="text-center">
     <h1 class="display-4">Alle Matches</h1>
-    <br />
+    @{ 
+        int r = 0;
+    }
 
     @foreach (var match in Model.Matches)
     {
         var datum = match.datum.ToString("D");
         var uhrzeit = match.uhrzeit.ToString("t");
 
-    <div style="border-radius: 20px;" class="shadow p-3 mb-3 bg-white text-left">
+        <div style="border-radius: 20px;" class="shadow p-3 mb-3 bg-white text-left">
 
         @{
             int i = 0;
         }
-        @foreach (var mannschaft in Model.Mannschaften)
-        {   
+        @foreach (var mannschaft in Model.Mannschaften.Skip(r))
+        {
             <div style="display: inline; font-size: 25px;">@mannschaft.name</div>
             if (i == 0)
             {
                 <strong style="font-size: 25px;">  VS. </strong>
             }
             i++;
+            if(i == 2)
+            { 
+                break;
+            }
         }
 
-        <br />
-        <br />
+        @{
+            r += 2;
+         }
 
-        <p style="font-size: 20px;"><strong>@datum, </strong>@uhrzeit</p>
-        <p style="font-size: 20px;"><strong>@match.hallenname, </strong>@match.ort</p>
-
-        @if (User.IsInRole("0"))
-        {
+        <br />
+        <p style="font-size: 22.5px;"><strong>@match.ort</strong></p>
+        <p style="font-size: 20px;"><strong>Halle: </strong>@match.hallenname</p>
+        <p style="font-size: 20px;"><strong>Datum: </strong>@datum</p>
+        <div class="d-flex justify-content-between">
+            <a style="font-size: 20px;"><strong>Uhrzeit: </strong>@uhrzeit</a>
             <a asp-controller="Match" asp-action="DetailsMatch" asp-route-rowguid="@match.id_match" class="btn btn-primary">Match anzeigen</a>
-        }
-
-
+        </div>
     </div>
-        }
-
+    }
 </div>

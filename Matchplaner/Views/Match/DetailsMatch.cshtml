@@ -1,12 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Match Details";
-    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 
+    if (User.IsInRole("1"))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+    else if (User.IsInRole("0"))
+    {
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
 }
 
 @model matchHelper
 
 <div class="text-left container mb-5" style="margin-top: 5%;">
+    <a asp-controller="Home" asp-action="Index" class=""><i class="bi bi-arrow-left-circle" style="font-size: 25px;"></i></a><br />
     <strong style="font-size: 25px;">Match Details</strong>
     <br />
     <br />
@@ -88,8 +100,6 @@
                 <a asp-controller="Match" asp-action="DeleteFromMatch" asp-route-rowguid="@Model.Match.id_match" class="btn btn-primary">Vom Match abmelden</a>
             }
         }
-
-        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Zurück</a>
 
     </div>
 

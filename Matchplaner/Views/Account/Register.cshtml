@@ -5,9 +5,10 @@
 
 @model registerHelper
 
-<div class="text-center container mt-5 mb-5">
+<div class="text-center container mb-5" style="margin-top: 8%;">
     <div class="row justify-content-around">
         <div style="border-radius: 15px;" class="shadow p-5 bg-white text-left">
+            <a asp-controller="Home" asp-action="Index" class=""><i class="bi bi-arrow-left-circle" style="font-size: 25px;"></i></a><br />
             <strong style="font-size: 25px;">Registrieren</strong>
             <br />
             <br />
@@ -37,35 +38,35 @@
                         <label class="form-check-label" for="@qualifikation.id_qualifikation">@qualifikation.name</label>
                     </div>
                 }
-                    
 
 
-                    <br />
-                    <br />
-                    <div class="form-group">
-                        <select class="custom-select" id="mannschaft" name="mannschaft">
-                            <option selected disabled>Mannschaft</option>
-                            @foreach (var mannschaft in Model.Mannschaften)
-                            {
-                                <option value="@mannschaft.id_mannschaft">@mannschaft.name</option>
-                            }
-                        </select>
+
+                <br />
+                <br />
+                <div class="form-group">
+                    <select class="custom-select" id="mannschaft" name="mannschaft">
+                        <option selected disabled>Mannschaft</option>
+                        @foreach (var mannschaft in Model.Mannschaften)
+                        {
+                            <option value="@mannschaft.id_mannschaft">@mannschaft.name</option>
+                        }
+                    </select>
+                </div>
+
+                @if (ViewBag.RegisterError != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ViewBag.RegisterError
                     </div>
+                }
 
-                    @if (ViewBag.RegisterError != null)
-                    {
-                        <div class="alert alert-danger" role="alert">
-                            @ViewBag.RegisterError
-                        </div>
-                    }
-
-                    <div class="form-group">
-                        <input type="submit" value="Registrieren" class="form-control btn btn-primary" />
-                    </div>
-                    <div>
-                        Du hast bereits ein Konto? <a asp-controller="Account" asp-action="Anmelden">Melde dich an!</a>
-                    </div>
-                </form>
+                <div class="form-group">
+                    <input type="submit" value="Registrieren" class="form-control btn btn-primary" />
+                </div>
+                <div>
+                    Du hast bereits ein Konto? <a asp-controller="Account" asp-action="Login">Melde dich an!</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>

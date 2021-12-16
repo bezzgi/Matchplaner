@@ -33,7 +33,7 @@ namespace Matchplaner
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                 o =>
                 {
-                    o.LoginPath = "/Account/Anmelden";
+                    o.LoginPath = "/Account/Login";
                 });
             services.AddControllersWithViews();
         }

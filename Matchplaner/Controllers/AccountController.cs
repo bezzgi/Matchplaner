@@ -153,13 +153,14 @@ namespace Matchplaner.Controllers
 
         [Authorize(Roles = "0")]
         [HttpPost]
-        public IActionResult EditBenutzer(string id_benutzer, [Bind("nachname, vorname, passwort")] Benutzer benutzerData)
+        public IActionResult EditBenutzer(string id_benutzer, [Bind("nachname, vorname, benutzername, passwort")] Benutzer benutzerData)
         {
             var benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.id_benutzer.ToString() == id_benutzer); 
 
             benutzer.vorname = benutzerData.vorname;
             benutzer.nachname = benutzerData.nachname;
             benutzer.passwort = benutzerData.passwort;
+            benutzer.benutzername = benutzerData.benutzername;
 
             _dbMatchplaner.Benutzer.Update(benutzer);
 

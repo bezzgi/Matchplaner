@@ -10,6 +10,7 @@
 @model IEnumerable<Benutzer>
 
 <div class="text-left">
+    <a asp-controller="Home" asp-action="Index" class=""><i class="bi bi-arrow-left-circle" style="font-size: 25px;"></i></a><br />
     <h1 class="display-4">Admins verwalten</h1>
     <div class="table-responsive">
         <table class="table">
@@ -24,17 +25,17 @@
             <tbody>
                 @foreach (var besitzer in Model)
                 {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => besitzer.vorname)</td>
-                    <td>@Html.DisplayFor(modelItem => besitzer.nachname)</td>
-                    <td>@Html.DisplayFor(modelItem => besitzer.benutzername)</td>
-                    @if (besitzer.benutzername != "Administrator")
-                    {
-                        <td>
-                            <a asp-action="DeleteAdmin" class="text-primary" asp-route-rowguid="@besitzer.id_benutzer"><i class="bi bi-trash"></i></a>
-                        </td>
-                    }
-                </tr>
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => besitzer.vorname)</td>
+                        <td>@Html.DisplayFor(modelItem => besitzer.nachname)</td>
+                        <td>@Html.DisplayFor(modelItem => besitzer.benutzername)</td>
+                        @if (besitzer.benutzername != "Administrator")
+                        {
+                            <td>
+                                <a asp-action="DeleteAdmin" class="text-primary" asp-route-rowguid="@besitzer.id_benutzer"><i class="bi bi-trash"></i></a>
+                            </td>
+                        }
+                    </tr>
 
                 }
             </tbody>
