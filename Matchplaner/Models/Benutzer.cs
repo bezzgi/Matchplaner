@@ -15,16 +15,20 @@ namespace Matchplaner.Models
         [ReadOnly(true)]
         public int id_benutzer { get; set; }
 
-        [Required(ErrorMessage = "Vorname ist erforderlich.")]
+        [Required(ErrorMessage = "Vorname ist erforderlich!")]
+        [MaxLength(40)]
         public string vorname { get; set; }
 
-        [Required(ErrorMessage = "Nachname ist erforderlich.")]
+        [Required(ErrorMessage = "Nachname ist erforderlich!")]
+        [MaxLength(40)]
         public string nachname { get; set; }
 
-        [Required(ErrorMessage = "Benutzername ist erforderlich.")]
+        [Required(ErrorMessage = "Benutzername ist erforderlich!")]
+        [MaxLength(20)]
         public string benutzername { get; set; }
 
-        [Required(ErrorMessage = "Passwort ist erforderlich.")]
+        [Required(ErrorMessage = "Passwort ist erforderlich!")]
+        [MaxLength(30)]
         [DataType(DataType.Password)]
         public string passwort { get; set; }
 

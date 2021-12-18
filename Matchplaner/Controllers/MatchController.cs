@@ -57,7 +57,13 @@ namespace Matchplaner.Controllers
             ViewBag.countSchiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_schiedsrichter == 1);
             ViewBag.countPunkteschreiber = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_punkteschreiber == 1);
 
-            if(User.Identity.Name != null)
+            model.Spieler = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_spieler == 1).Select(m => m.Benutzer).ToList();
+
+            model.Punkteschreiber = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_punkteschreiber == 1).Select(m => m.Benutzer).ToList();
+
+            model.Schiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_schiedsrichter == 1).Select(m => m.Benutzer).ToList();
+
+            if (User.Identity.Name != null)
             {
                 model.Benutzer = _dbMatchplaner.Benutzer.Where(b => b.id_benutzer.ToString() == User.Identity.Name).FirstOrDefault();
             }
@@ -101,9 +107,16 @@ namespace Matchplaner.Controllers
 
                     _dbMatchplaner.Match_Has_Mannschaft.Add(mhasm);
 
-                    ViewBag.CreateMatchMessage = "Das Match wurde erfolgreich erstellt!";
+                    if(ModelState.IsValid)
+                    {
+                        ViewBag.CreateMatchMessage = "Das Match wurde erfolgreich erstellt!";
 
-                    _dbMatchplaner.SaveChanges();
+                        _dbMatchplaner.SaveChanges();
+                    }
+                    else
+                    {
+                        return View(model);
+                    }
                 }
 
                 return View(model);

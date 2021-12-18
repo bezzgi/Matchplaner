@@ -21,7 +21,11 @@ namespace Matchplaner.Models
 
         public Benutzer Benutzer = new Benutzer();
 
-        public List<Benutzer> BenutzerList = new List<Benutzer>();
+        public List<Benutzer> Spieler = new List<Benutzer>();
+
+        public List<Benutzer> Schiedsrichter = new List<Benutzer>();
+
+        public List<Benutzer> Punkteschreiber = new List<Benutzer>();
 
         public MhasB MhasB = new MhasB();
     }

@@ -44,13 +44,13 @@ namespace Matchplaner.Controllers
 
                 _dbMatchplaner.Benutzer.Add(benutzer);
 
-                _dbMatchplaner.SaveChangesAsync();
+                _dbMatchplaner.SaveChanges();
 
                 ViewBag.CreateAdminMessage = "Der Admin wurde erfolgreich erstellt!";
             }
             catch (Exception)
             {
-                ViewBag.CreateAdminError = "Es ist ein Fehler aufgetreten.";
+                
             }
 
             return View();

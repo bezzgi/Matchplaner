@@ -24,8 +24,8 @@
     <br />
 
     @{
-        var datum = Model.Match.datum.ToString("D");
-        var uhrzeit = Model.Match.uhrzeit.ToString("t");
+        string datum = String.Format("{0:D}", Model.Match.datum);
+        string uhrzeit = String.Format("{0:t}", Model.Match.uhrzeit);
     }
 
     @{
@@ -78,7 +78,6 @@
             <p>Als Punkteschreiber eintragen: <a asp-action="Punkteschreiber" asp-route-rowguid="@Model.Match.id_match"> <i class="bi bi-pencil"></i></a></p>
         }
 
-
         @if (ViewBag.MatchError != null)
         {
             <div class="alert alert-danger" role="alert">
@@ -92,6 +91,53 @@
                 @TempData["MannschaftMessage"]
             </div>
         }
+
+        <hr />
+
+        <a><strong>Spieler</strong></a>
+
+        @if (Model.Spieler.Count == 0)
+        {
+            <div>-</div>
+        }
+
+        @foreach (var benutzer in Model.Spieler)
+        {
+            <div>
+                @benutzer.nachname @benutzer.vorname
+            </div>
+        }
+        <br />
+
+        <a><strong>Schiedsrichter</strong></a>
+
+        @if (Model.Schiedsrichter.Count == 0)
+        {
+            <div>-</div>
+        }
+
+        @foreach (var benutzer in Model.Schiedsrichter)
+        {
+            <div>
+                @benutzer.nachname @benutzer.vorname
+            </div>
+        }
+        <br />
+
+        <a><strong>Punkteschreiber</strong></a>
+
+        @if (Model.Punkteschreiber.Count == 0)
+        {
+            <div>-</div>
+        }
+
+        @foreach (var benutzer in Model.Punkteschreiber)
+        {
+            <div>
+                @benutzer.nachname @benutzer.vorname
+            </div>
+        }
+        <br />
 
         @if (Model.MhasB != null)
         {

@@ -15,6 +15,7 @@ namespace Matchplaner.Models
         [ReadOnly(true)]
         public int id_mannschaft { get; set; }
 
+        [Required]
         public string name { get; set; }
 
     }

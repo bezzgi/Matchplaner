@@ -15,8 +15,5 @@ namespace Matchplaner.Models
         public int id_qualifikation { get; set; }
 
         public string name { get; set; }
-
-        [NotMapped]
-        public bool IsChecked { get; set; }
     }
 }

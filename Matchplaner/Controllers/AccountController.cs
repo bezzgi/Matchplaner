@@ -5,15 +5,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
-using System.Web;
+using System.Security.Cryptography;
 
 namespace Matchplaner.Controllers
 {
@@ -80,7 +77,7 @@ namespace Matchplaner.Controllers
         }
 
         
-        //Regoster POST
+        //Register POST
         [HttpPost]
         public IActionResult Register(registerHelper model, Benutzer benutzer)
         {
@@ -115,32 +112,50 @@ namespace Matchplaner.Controllers
 
             benutzer.admin = 0;
 
+            //string hashedPassword = HashAlgorithm.Create(benutzer.passwort);
+
             string mannschaft = Request.Form["mannschaft"];
 
             if(benutzer.is_spieler == 1)
             {
-                benutzer.fk_mannschaft_id = Convert.ToInt32(mannschaft);
+                if(mannschaft != null)
+                {
+                    benutzer.fk_mannschaft_id = Convert.ToInt32(mannschaft);
+                }
+                else
+                {
+                    ViewBag.RegisterError = ("Wählen Sie eine Mannschaft!");
+
+                    return View(model);
+                }
             }
             else
             {
-                //hier nehme ich einfach den Wert 1, da der Fremdschlüssel nicht null sein darf. Dieser Wert hat später keinen Einfluss auf das Progrmam
+                //hier nehme ich einfach den Wert 1, da der Fremdschlüssel nicht null sein darf. Dieser Wert hat später keinen Einfluss auf das Programm
                 benutzer.fk_mannschaft_id = 1;
             }
 
 
             _dbMatchplaner.Benutzer.Add(benutzer);
 
-            _dbMatchplaner.SaveChanges();
+            if(ModelState.IsValid)
+            {
+                _dbMatchplaner.SaveChanges();
 
-            TempData["RegisterSuccess"] = "Ihr Benutzerkonto wurde erstellt.";
+                TempData["RegisterSuccess"] = "Ihr Benutzerkonto wurde erstellt.";
 
-            return RedirectToAction(nameof(Login));
+                return RedirectToAction(nameof(Login));
+            }
+            else
+            {
+                return View(model);
+            }           
         }
 
-
-
-
-
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
 
         [Authorize(Roles = "0")]
@@ -172,9 +187,8 @@ namespace Matchplaner.Controllers
             }
             catch (Exception)
             {
-                ViewBag.EditError = "Es ist ein Fehler aufgetreten.";
+                
             }
-
 
             return View();
         }

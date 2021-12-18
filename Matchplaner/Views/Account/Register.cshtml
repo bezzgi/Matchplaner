@@ -60,6 +60,14 @@
                     </div>
                 }
 
+                @if (ViewData.ModelState.IsValid == false)
+                {
+                    <div asp-validation-summary="All" class="alert alert-danger" role="alert">
+
+                    </div>
+                }
+
+
                 <div class="form-group">
                     <input type="submit" value="Registrieren" class="form-control btn btn-primary" />
                 </div>
@@ -74,8 +82,7 @@
 <script>
     window.onload = toggleSelect();
 
-    function toggleSelect()
-    {
+    function toggleSelect() {
         var isChecked = document.getElementById(3).checked;
         document.getElementById("mannschaft").disabled = !isChecked;
     }

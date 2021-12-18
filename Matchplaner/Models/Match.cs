@@ -14,14 +14,20 @@ namespace Matchplaner.Models
         [ReadOnly(true)]
         public int id_match { get; set; }
 
+        [Required(ErrorMessage = "Hallenname ist erforderlich!")]
+        [MaxLength(40)]
         public string hallenname { get; set; }
 
+        [Required(ErrorMessage = "Ort ist erforderlich!")]
+        [MaxLength(30)]
         public string ort { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime datum { get; set; }
+        [Required(ErrorMessage = "Datum ist erforderlich!")]
+        [DataType(DataType.Date, ErrorMessage = "Datum ist ungültig!")]
+        public DateTime? datum { get; set; }
 
-        [DataType(DataType.Time)]
-        public DateTime uhrzeit { get; set; }
+        [Required(ErrorMessage = "Uhrzeit ist erforderlich!")]
+        [DataType(DataType.Time, ErrorMessage = "Uhrzeit ist ungültig!")]
+        public DateTime? uhrzeit { get; set; }
     }
 }

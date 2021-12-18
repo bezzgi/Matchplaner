@@ -13,8 +13,13 @@ namespace Matchplaner.Models
         [ReadOnly(true)]
         public int match_id_match { get; set; }
 
+        [ForeignKey("match_id_match")]
+        public Match Match { get; set; }
+
         [ReadOnly(true)]
         public int benutzer_id_benutzer { get; set; }
+
+        public Benutzer Benutzer { get; set; }
 
         public int benutzer_is_schiedsrichter { get; set; }
 
