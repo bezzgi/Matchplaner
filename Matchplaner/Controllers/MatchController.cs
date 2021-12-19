@@ -86,8 +86,13 @@ namespace Matchplaner.Controllers
             }
         }
 
-        public IActionResult DetailsMatch(int rowguid, matchHelper model)
+        public IActionResult DetailsMatch(int? rowguid, matchHelper model)
         {
+            if(rowguid == null)
+            {
+                return NotFound();
+            }
+
             var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Where(m => m.match_id_match == rowguid).Select(m => m.Mannschaft).ToList();
 
             model.Mannschaften = mannschaft;
@@ -96,8 +101,14 @@ namespace Matchplaner.Controllers
 
             model.MhasB = mhasb;
 
+            var match = _dbMatchplaner.Match.Where(m => m.id_match == rowguid).FirstOrDefault();
 
-            model.Match = _dbMatchplaner.Match.Where(m => m.id_match == rowguid).FirstOrDefault();
+            if (match == null)
+            {
+                return NotFound();
+            }
+
+            model.Match = match;
 
             ViewBag.countSpieler = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_spieler == 1);
             ViewBag.countSchiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_schiedsrichter == 1);
@@ -298,9 +309,19 @@ namespace Matchplaner.Controllers
         }
 
         [Authorize(Roles = "0")]
-        public IActionResult DeleteFromMatch(int rowguid)
+        public IActionResult DeleteFromMatch(int? rowguid)
         {
+            if(rowguid == null)
+            {
+                return NotFound();
+            }
+
             var mhasb = _dbMatchplaner.Match_Has_Benutzer.FirstOrDefault(m => m.match_id_match == rowguid && m.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name));
+
+            if(mhasb == null)
+            {
+                return NotFound();
+            }
 
             _dbMatchplaner.Match_Has_Benutzer.Remove(mhasb);
 

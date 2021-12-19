@@ -195,10 +195,13 @@ namespace Matchplaner.Controllers
             }           
         }
 
+
+
         public IActionResult AccessDenied()
         {
             return View();
         }
+
 
 
         [Authorize(Roles = "0")]

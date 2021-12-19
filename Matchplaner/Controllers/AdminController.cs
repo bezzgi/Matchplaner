@@ -21,11 +21,14 @@ namespace Matchplaner.Controllers
         {
             _dbMatchplaner = dbMatchplaner;
         }
+
+
         [Authorize(Roles = "1")]
         public IActionResult CreateAdmin()
         {
             return View();
         }
+
 
         [Authorize(Roles = "1")]
         [HttpPost]
@@ -100,8 +103,6 @@ namespace Matchplaner.Controllers
             _dbMatchplaner.SaveChanges();
 
             return RedirectToAction(nameof(ShowAdmin));
-        }
-
-        
+        } 
     }
 }
