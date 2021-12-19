@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
+using System.Web.Helpers;
 
 namespace Matchplaner.Controllers
 {
@@ -34,21 +34,40 @@ namespace Matchplaner.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Benutzer benutzer, string returnURL)
         {
-            var user = await _dbMatchplaner.Benutzer.FirstOrDefaultAsync(b => b.benutzername == benutzer.benutzername && b.passwort == benutzer.passwort);
+            var user = await _dbMatchplaner.Benutzer.FirstOrDefaultAsync(b => b.benutzername == benutzer.benutzername);
 
             if (user != null)
             {
-                var claims = new List<Claim>
+                bool validate = Crypto.VerifyHashedPassword(user.passwort, benutzer.passwort);
+
+                if(validate == true)
                 {
-                    new Claim(ClaimTypes.Name, user.id_benutzer.ToString()),
-                    new Claim(ClaimTypes.Role, user.admin.ToString())
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.id_benutzer.ToString()),
+                        new Claim(ClaimTypes.Role, user.admin.ToString())
 
-                };
+                    };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                return Redirect(returnURL == null ? "/Home" : returnURL);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                    Logger logger = new Logger();
+                    logger.fk_benutzer_id = user.id_benutzer;
+                    logger.logging = "Angemeldet";
+                    logger.zeit = DateTime.Now;
+                    _dbMatchplaner.Logger.Add(logger);
+                    _dbMatchplaner.SaveChanges();
+
+                    return Redirect(returnURL == null ? "/Home" : returnURL);
+                }
+                else
+                {
+                    ViewBag.LoginError = "Falscher Benutzername oder Passwort";
+
+                    return View();
+                }
             }
             else
             {
@@ -71,8 +90,6 @@ namespace Matchplaner.Controllers
 
             model.Mannschaften = _dbMatchplaner.Mannschaft.ToList();
 
-
-
             return View(model);
         }
 
@@ -90,6 +107,15 @@ namespace Matchplaner.Controllers
             if (qualifikation.Length == 0)
             {
                 ViewBag.RegisterError = ("Wählen Sie eine Qualifikation!");
+
+                return View(model);
+            }
+
+            int benutzerAlreadyTaken = _dbMatchplaner.Benutzer.Count(b => b.benutzername == benutzer.benutzername);
+
+            if(benutzerAlreadyTaken >= 1)
+            {
+                ViewBag.RegisterError = ("Dieser Benutzername ist bereits vergeben!");
 
                 return View(model);
             }
@@ -112,7 +138,15 @@ namespace Matchplaner.Controllers
 
             benutzer.admin = 0;
 
-            //string hashedPassword = HashAlgorithm.Create(benutzer.passwort);
+            if(ModelState.IsValid)
+            {
+                benutzer.passwort = Crypto.HashPassword(benutzer.passwort);
+            }
+            else
+            {
+                return View(model);
+            }
+           
 
             string mannschaft = Request.Form["mannschaft"];
 
@@ -135,11 +169,20 @@ namespace Matchplaner.Controllers
                 benutzer.fk_mannschaft_id = 1;
             }
 
-
             _dbMatchplaner.Benutzer.Add(benutzer);
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                _dbMatchplaner.SaveChanges();
+
+                var id_benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.benutzername == benutzer.benutzername);
+
+                Logger logger = new Logger();
+                logger.fk_benutzer_id = id_benutzer.id_benutzer;
+                logger.logging = "Registriert";
+                logger.zeit = DateTime.Now;
+                _dbMatchplaner.Logger.Add(logger);
+
                 _dbMatchplaner.SaveChanges();
 
                 TempData["RegisterSuccess"] = "Ihr Benutzerkonto wurde erstellt.";
@@ -177,10 +220,27 @@ namespace Matchplaner.Controllers
             benutzer.passwort = benutzerData.passwort;
             benutzer.benutzername = benutzerData.benutzername;
 
+            if (ModelState.IsValid)
+            {
+                string hashedPassword = Crypto.HashPassword(benutzer.passwort);
+
+                benutzer.passwort = hashedPassword;
+            }
+            else
+            {
+                return View();
+            }
+
             _dbMatchplaner.Benutzer.Update(benutzer);
 
             try
             {
+                Logger logger = new Logger();
+                logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+                logger.logging = "Konto bearbeitet";
+                logger.zeit = DateTime.Now;
+                _dbMatchplaner.Logger.Add(logger);
+
                 _dbMatchplaner.SaveChanges();
 
                 ViewBag.EditMessage = "Daten erfolgreich geändert.";
@@ -199,6 +259,12 @@ namespace Matchplaner.Controllers
         public IActionResult DeleteBenutzer()
         {
             var benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.id_benutzer == Convert.ToInt32(User.Identity.Name));
+
+            Logger logger = new Logger();
+            logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+            logger.logging = "Konto gelöscht";
+            logger.zeit = DateTime.Now;
+            _dbMatchplaner.Logger.Add(logger);
 
             _dbMatchplaner.Remove(benutzer);
 

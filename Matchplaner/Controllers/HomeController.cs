@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,6 +52,13 @@ namespace Matchplaner.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
+            Logger logger = new Logger();
+            logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+            logger.logging = "Abgemeldet";
+            logger.zeit = DateTime.Now;
+            _dbMatchplaner.Logger.Add(logger);
+            _dbMatchplaner.SaveChanges();
+
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index");
         }

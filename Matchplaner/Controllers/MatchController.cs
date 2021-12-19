@@ -1,21 +1,11 @@
 ﻿using Matchplaner.Helpers;
 using Matchplaner.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RestSharp;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Matchplaner.Controllers
 {
@@ -39,41 +29,6 @@ namespace Matchplaner.Controllers
             return View(model);
         }
 
-
-        public IActionResult DetailsMatch(int rowguid, matchHelper model)
-        {
-            var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Where(m => m.match_id_match == rowguid).Select(m => m.Mannschaft).ToList();
-
-            model.Mannschaften = mannschaft;
-
-            var mhasb = _dbMatchplaner.Match_Has_Benutzer.FirstOrDefault(b => b.match_id_match == rowguid && b.benutzer_id_benutzer.ToString() == User.Identity.Name);
-
-            model.MhasB = mhasb;
-            
-
-            model.Match = _dbMatchplaner.Match.Where(m => m.id_match == rowguid).FirstOrDefault();
-
-            ViewBag.countSpieler = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_spieler == 1);
-            ViewBag.countSchiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_schiedsrichter == 1);
-            ViewBag.countPunkteschreiber = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_punkteschreiber == 1);
-
-            model.Spieler = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_spieler == 1).Select(m => m.Benutzer).ToList();
-
-            model.Punkteschreiber = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_punkteschreiber == 1).Select(m => m.Benutzer).ToList();
-
-            model.Schiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_schiedsrichter == 1).Select(m => m.Benutzer).ToList();
-
-            if (User.Identity.Name != null)
-            {
-                model.Benutzer = _dbMatchplaner.Benutzer.Where(b => b.id_benutzer.ToString() == User.Identity.Name).FirstOrDefault();
-            }
-            else
-            {
-                model.Benutzer = _dbMatchplaner.Benutzer.FirstOrDefault();
-            }
-
-            return View(model);
-        }
 
         [Authorize(Roles = "1")]
         [HttpPost]
@@ -119,8 +74,51 @@ namespace Matchplaner.Controllers
                     }
                 }
 
+                Logger logger = new Logger();
+                logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+                logger.logging = "Match erstellt";
+                logger.zeit = DateTime.Now;
+                _dbMatchplaner.Logger.Add(logger);
+
+                _dbMatchplaner.SaveChanges();
+
                 return View(model);
             }
+        }
+
+        public IActionResult DetailsMatch(int rowguid, matchHelper model)
+        {
+            var mannschaft = _dbMatchplaner.Match_Has_Mannschaft.Include(x => x.Mannschaft).Where(m => m.match_id_match == rowguid).Select(m => m.Mannschaft).ToList();
+
+            model.Mannschaften = mannschaft;
+
+            var mhasb = _dbMatchplaner.Match_Has_Benutzer.FirstOrDefault(b => b.match_id_match == rowguid && b.benutzer_id_benutzer.ToString() == User.Identity.Name);
+
+            model.MhasB = mhasb;
+
+
+            model.Match = _dbMatchplaner.Match.Where(m => m.id_match == rowguid).FirstOrDefault();
+
+            ViewBag.countSpieler = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_spieler == 1);
+            ViewBag.countSchiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_schiedsrichter == 1);
+            ViewBag.countPunkteschreiber = _dbMatchplaner.Match_Has_Benutzer.Count(b => b.match_id_match == rowguid && b.benutzer_is_punkteschreiber == 1);
+
+            model.Spieler = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_spieler == 1).Select(m => m.Benutzer).ToList();
+
+            model.Punkteschreiber = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_punkteschreiber == 1).Select(m => m.Benutzer).ToList();
+
+            model.Schiedsrichter = _dbMatchplaner.Match_Has_Benutzer.Include(b => b.Benutzer).Where(m => m.match_id_match == rowguid && m.benutzer_is_schiedsrichter == 1).Select(m => m.Benutzer).ToList();
+
+            if (User.Identity.Name != null)
+            {
+                model.Benutzer = _dbMatchplaner.Benutzer.Where(b => b.id_benutzer.ToString() == User.Identity.Name).FirstOrDefault();
+            }
+            else
+            {
+                model.Benutzer = _dbMatchplaner.Benutzer.FirstOrDefault();
+            }
+
+            return View(model);
         }
 
         [Authorize(Roles = "1")]
@@ -145,8 +143,14 @@ namespace Matchplaner.Controllers
                 return NotFound();
             }
 
+            Logger logger = new Logger();
+            logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+            logger.logging = "Match gelöscht";
+            logger.zeit = DateTime.Now;
+            _dbMatchplaner.Logger.Add(logger);
+
             _dbMatchplaner.Match.Remove(match);
-            await _dbMatchplaner.SaveChangesAsync();
+            _dbMatchplaner.SaveChanges();
 
             return RedirectToAction(nameof(ShowMatch));
         }
@@ -174,6 +178,12 @@ namespace Matchplaner.Controllers
             try
             {
                 _dbMatchplaner.Match_Has_Benutzer.Add(mhasb);
+
+                Logger logger = new Logger();
+                logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+                logger.logging = "Als Schiedsrichter angemeldet";
+                logger.zeit = DateTime.Now;
+                _dbMatchplaner.Logger.Add(logger);
 
                 _dbMatchplaner.SaveChanges();
             }
@@ -208,6 +218,12 @@ namespace Matchplaner.Controllers
             try
             {
                 _dbMatchplaner.Match_Has_Benutzer.Add(mhasb);
+
+                Logger logger = new Logger();
+                logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+                logger.logging = "Als Punkteschreiber angemeldet";
+                logger.zeit = DateTime.Now;
+                _dbMatchplaner.Logger.Add(logger);
 
                 _dbMatchplaner.SaveChanges();
             }
@@ -254,6 +270,12 @@ namespace Matchplaner.Controllers
                     {
                         _dbMatchplaner.Match_Has_Benutzer.Add(mhasb);
 
+                        Logger logger = new Logger();
+                        logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+                        logger.logging = "Als Spieler angemeldet";
+                        logger.zeit = DateTime.Now;
+                        _dbMatchplaner.Logger.Add(logger);
+
                         _dbMatchplaner.SaveChanges();
 
                         break;
@@ -262,7 +284,7 @@ namespace Matchplaner.Controllers
                     {
                         if(i != 1)
                         {
-                            TempData["MannschaftMessage"] = "Sie Spielen in keiner der beiden Mannschaften.";
+                            TempData["MannschaftMessage"] = "Sie spielen in keiner der beiden Mannschaften.";
                         }
                     }
                 }
@@ -281,6 +303,12 @@ namespace Matchplaner.Controllers
             var mhasb = _dbMatchplaner.Match_Has_Benutzer.FirstOrDefault(m => m.match_id_match == rowguid && m.benutzer_id_benutzer == Convert.ToInt32(User.Identity.Name));
 
             _dbMatchplaner.Match_Has_Benutzer.Remove(mhasb);
+
+            Logger logger = new Logger();
+            logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+            logger.logging = "Vom Match abgemeldet";
+            logger.zeit = DateTime.Now;
+            _dbMatchplaner.Logger.Add(logger);
 
             _dbMatchplaner.SaveChanges();
 

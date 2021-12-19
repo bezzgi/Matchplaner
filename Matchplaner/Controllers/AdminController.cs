@@ -1,19 +1,12 @@
 ﻿using Matchplaner.Helpers;
 using Matchplaner.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
-using System.Web;
+using System.Web.Helpers;
 
 namespace Matchplaner.Controllers
 {
@@ -42,7 +35,24 @@ namespace Matchplaner.Controllers
             {
                 benutzer.fk_mannschaft_id = 1;
 
+                benutzer.passwort = Crypto.HashPassword(benutzer.passwort);
+
+                int benutzerAlreadyTaken = _dbMatchplaner.Benutzer.Count(b => b.benutzername == benutzer.benutzername);
+
+                if (benutzerAlreadyTaken >= 1)
+                {
+                    ViewBag.CreateAdminError = ("Dieser Benutzername ist bereits vergeben!");
+
+                    return View();
+                }
+
                 _dbMatchplaner.Benutzer.Add(benutzer);
+
+                Logger logger = new Logger();
+                logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+                logger.logging = "Admin erstellt";
+                logger.zeit = DateTime.Now;
+                _dbMatchplaner.Logger.Add(logger);
 
                 _dbMatchplaner.SaveChanges();
 
@@ -80,7 +90,14 @@ namespace Matchplaner.Controllers
             }
 
             _dbMatchplaner.Benutzer.Remove(benutzer);
-            await _dbMatchplaner.SaveChangesAsync();
+
+            Logger logger = new Logger();
+            logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
+            logger.logging = "Admin gelöscht";
+            logger.zeit = DateTime.Now;
+            _dbMatchplaner.Logger.Add(logger);
+
+            _dbMatchplaner.SaveChanges();
 
             return RedirectToAction(nameof(ShowAdmin));
         }

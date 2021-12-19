@@ -25,17 +25,32 @@
             <tbody>
                 @foreach (var besitzer in Model)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => besitzer.vorname)</td>
-                        <td>@Html.DisplayFor(modelItem => besitzer.nachname)</td>
-                        <td>@Html.DisplayFor(modelItem => besitzer.benutzername)</td>
-                        @if (besitzer.benutzername != "Administrator")
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => besitzer.vorname)</td>
+                    <td>@Html.DisplayFor(modelItem => besitzer.nachname)</td>
+                    <td>@Html.DisplayFor(modelItem => besitzer.benutzername)</td>
+
+                    @if (besitzer.benutzername != "Administrator")
+                    {
+                        if (Model.Count() >= 2)
                         {
                             <td>
                                 <a asp-action="DeleteAdmin" class="text-primary" asp-route-rowguid="@besitzer.id_benutzer"><i class="bi bi-trash"></i></a>
                             </td>
                         }
-                    </tr>
+                    }
+
+                    @if (besitzer.benutzername == "Administrator")
+                    {
+                        if (Model.Count() >= 2)
+                        {
+                            <td>
+                                <a asp-action="DeleteAdmin" class="text-primary" asp-route-rowguid="@besitzer.id_benutzer"><i class="bi bi-trash"></i></a>
+                            </td>
+                        }
+
+                    }
+                </tr>
 
                 }
             </tbody>

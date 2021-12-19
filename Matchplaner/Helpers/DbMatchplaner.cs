@@ -28,6 +28,8 @@ namespace Matchplaner.Helpers
 
         public DbSet<MhasB> Match_Has_Benutzer { set; get; }
 
+        public DbSet<Logger> Logger { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
