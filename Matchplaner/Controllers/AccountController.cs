@@ -205,18 +205,18 @@ namespace Matchplaner.Controllers
 
 
         [Authorize(Roles = "0")]
-        public IActionResult EditBenutzer(string id_benutzer)
+        public IActionResult EditBenutzer()
         {
-            var benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.id_benutzer.ToString() == id_benutzer);
+            var benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.id_benutzer == Convert.ToInt32(User.Identity.Name));
 
             return View(benutzer);
         }
 
         [Authorize(Roles = "0")]
         [HttpPost]
-        public IActionResult EditBenutzer(string id_benutzer, [Bind("nachname, vorname, benutzername, passwort")] Benutzer benutzerData)
+        public IActionResult EditBenutzer([Bind("nachname, vorname, benutzername, passwort")] Benutzer benutzerData)
         {
-            var benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.id_benutzer.ToString() == id_benutzer); 
+            var benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.id_benutzer == Convert.ToInt32(User.Identity.Name)); 
 
             benutzer.vorname = benutzerData.vorname;
             benutzer.nachname = benutzerData.nachname;
@@ -262,12 +262,6 @@ namespace Matchplaner.Controllers
         public IActionResult DeleteBenutzer()
         {
             var benutzer = _dbMatchplaner.Benutzer.FirstOrDefault(b => b.id_benutzer == Convert.ToInt32(User.Identity.Name));
-
-            Logger logger = new Logger();
-            logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
-            logger.logging = "Konto gelöscht";
-            logger.zeit = DateTime.Now;
-            _dbMatchplaner.Logger.Add(logger);
 
             _dbMatchplaner.Remove(benutzer);
 

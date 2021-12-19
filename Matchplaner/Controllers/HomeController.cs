@@ -50,13 +50,6 @@ namespace Matchplaner.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            Logger logger = new Logger();
-            logger.fk_benutzer_id = Convert.ToInt32(User.Identity.Name);
-            logger.logging = "Abgemeldet";
-            logger.zeit = DateTime.Now;
-            _dbMatchplaner.Logger.Add(logger);
-            _dbMatchplaner.SaveChanges();
-
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index");
         }
